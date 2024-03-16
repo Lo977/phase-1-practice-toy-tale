@@ -1,4 +1,5 @@
 let addToy = false;
+let toyid;
 
 document.addEventListener("DOMContentLoaded", () => {
   const addBtn = document.querySelector("#new-toy-btn");
@@ -18,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .then((resp) => resp.json())
     .then((toyData) => {
       toyData.forEach((toy) => {
+        toyid = toy.id;
         let card = document.createElement("div");
         card.className = "card";
         card.innerHTML = `
@@ -25,12 +27,16 @@ document.addEventListener("DOMContentLoaded", () => {
         <img src="${toy.image}" class="toy-avatar" />
         <p class="likes">${toy.likes} Likes</p>
         <button class="like-btn" id="${toy.id}">Like ❤️</button>
+        <button class="dltBtn">x</button>
         `;
+        card.querySelector(".dltBtn").addEventListener("click", () => {
+          handleDelete(toyid);
+          card.remove();
+        });
         card.querySelector("button").addEventListener("click", (e) => {
-          let id = e.target.id;
           toy.likes++;
-          card.querySelector("p").textContent = `${toy.likes} Likes !`;
-          fetch(`http://localhost:3000/toys/${id}`, {
+          card.querySelector(".likes").textContent = `${toy.likes} Likes !`;
+          fetch(`http://localhost:3000/toys/${toy.id}`, {
             method: "PATCH",
             headers: {
               "Content-Type": "application/json",
@@ -39,12 +45,14 @@ document.addEventListener("DOMContentLoaded", () => {
             body: JSON.stringify(toy),
           });
         });
+
         document.querySelector("#toy-collection").appendChild(card);
       });
     });
 });
 
 document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault();
   fetch("http://localhost:3000/toys", {
     method: "POST",
     headers: {
@@ -58,3 +66,12 @@ document.querySelector("form").addEventListener("submit", (e) => {
     }),
   });
 });
+
+function handleDelete() {
+  fetch(`http://localhost:3000/toys/${toyid}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+}

@@ -1,6 +1,7 @@
 body {
   margin: 0;
   font-family: monospace;
+  background-color: rgb(237, 232, 232);
 }
 
 #toy-header {
@@ -48,6 +49,7 @@ button {
   color: whitesmoke;
   font-size: 18px;
   justify-self: center;
+  cursor: pointer;
 }
 
 button:hover {
@@ -98,4 +100,11 @@ button:hover {
 }
 .likes {
   font-weight: 900;
+}
+.dltBtn {
+  margin-left: 240px;
+  margin-top: -405px;
+  width: 19px;
+  padding: 0pxs;
+  height: 22px;
 }
